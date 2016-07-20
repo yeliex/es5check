@@ -1,0 +1,26 @@
+{
+  "name": "es5check",
+  "version": "1.0.0",
+  "description": "check es6 statement in es5 code",
+  "main": "index.js",
+  "bin": {
+    "es5check": "index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yeliex/es5check.git"
+  },
+  "author": "yeliex",
+  "license": "WTFPL",
+  "bugs": {
+    "url": "https://github.com/yeliex/es5check/issues"
+  },
+  "homepage": "https://github.com/yeliex/es5check#readme",
+  "dependencies": {
+    "co": "^4.6.0",
+    "strip-json-comments": "^2.0.1"
+  }
+}
