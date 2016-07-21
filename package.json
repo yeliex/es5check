@@ -1,6 +1,6 @@
 {
   "name": "es5check",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "check es6 statement in es5 code",
   "main": "index.js",
   "bin": {

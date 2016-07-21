@@ -69,7 +69,7 @@ const checkFile = () => {
     finish();
   } else {
     console.log(`\n${'\033[4m'}${p}${'\033[0m'}\n`);
-    if (p.match(/\.js.?$/)) {
+    if (p.match(/\.js.?|html$/)) {
       // 是js?个文件
       let rl = readline.createInterface({
         input: fs.createReadStream(p)
