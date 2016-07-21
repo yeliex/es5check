@@ -1,15 +1,10 @@
-/**
- * Creator: yeliex
- * Project: es5check
- * Description:
- */
+#!/usr/bin/env node
 
 const app = require('./../package.json');
 const path = require('path');
 const fs = require('fs');
 const readline = require('readline');
 const stripJsonComments = require('strip-json-comments');
-const check = require('../lib/check');
 
 const start = new Date();
 
@@ -19,15 +14,19 @@ let onProcess = true;
 const config = (()=> {
   const loadJson = (file) => JSON.parse(stripJsonComments(fs.readFileSync(file).toString()));
 
-  let defaultConfig = path.join(process.cwd(), '.es5checkrc');
-  if (fs.existsSync(defaultConfig)) {
-    return loadJson(defaultConfig);
-  } else {
-    return loadJson(path.join(__dirname, '.es5checkrc'));
-  }
-})();
+  const defaultConfigPath = path.join(process.cwd(), 'es5check.config.js');
 
-config.ignore = (config.ignore || []).concat(['.git', '.idea', '/node_modules/', '.es5checkrc']);
+  const defauleConfig = require('../es5check.config');
+
+  if (fs.existsSync(defaultConfigPath)) {
+    const userConfig = require(defaultConfigPath);
+    defauleConfig.rules = Object.assign({},defauleConfig.rules,userConfig.rules);
+    defauleConfig.ignore = defauleConfig.ignore.concat(userConfig.ignore);
+  }
+
+  return defauleConfig;
+})();
+const check = require('../lib/check')(config.rules);
 
 let countErr = 0;
 let countFile = 0;
@@ -72,7 +71,6 @@ const checkFile = () => {
     console.log(`\n${'\033[4m'}${p}${'\033[0m'}\n`);
     if (p.match(/\.js.?$/)) {
       // 是js?个文件
-      countFile++;
       let rl = readline.createInterface({
         input: fs.createReadStream(p)
       });
@@ -86,6 +84,7 @@ const checkFile = () => {
           rl.pause();
           const lineErr = check(line, num);
           countErr += lineErr;
+          currentErr += lineErr;
 
           rl.resume();
         }
@@ -93,15 +92,17 @@ const checkFile = () => {
 
       rl.on('close', ()=> {
 
-        if(currentErr === 0){
+        if (currentErr === 0) {
           console.log(`${'\033[1;32m'}All Checked${'\033[0m'}`)
+        } else {
+          countFile++;
         }
 
         rl = null;
         finish();
       });
     } else {
-      console.log(`Type not match: ${path.extname(p)}`);
+      console.log(`Type not support: ${path.extname(p)} \nAdd PR to ${'\033[4m'}https://github.com/yeliex/es5check${'\033[0m'} is welcome`);
       finish();
     }
   }
