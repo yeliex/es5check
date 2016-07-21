@@ -10,8 +10,8 @@ module.exports ={
     'no-for-of': /for(.*)of/g,
     'no-class': /class /g,
     'no-template-string': /`/g,
-    'no-spread': /\.\.\./g,
-    'no-let-or-const': /let|const/g,
+    'no-spread': /[\(,\[].*\.\.\..*[\),\]]/g,
+    'no-let-or-const': /let |const /g,
     'no-iterator': /\[.*\] *\(.*\)/g,
     'no-generators': /function.*\*/g,
     'no-yeild': /yield/g
